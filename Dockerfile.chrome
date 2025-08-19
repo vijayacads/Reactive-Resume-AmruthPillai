@@ -1,0 +1,11 @@
+FROM ghcr.io/browserless/chromium:latest
+
+ENV HEALTH="true"
+ENV TOKEN="chrome_token"
+ENV PROXY_HOST="chrome"
+ENV PROXY_PORT="3000"
+ENV PROXY_SSL="false"
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
