@@ -23,17 +23,23 @@ services:
       - key: MAIL_FROM
         value: noreply@your-app-name.onrender.com
       - key: STORAGE_ENDPOINT
-        value: your-supabase-project.supabase.co
+        value: dummy.supabase.co
       - key: STORAGE_PORT
         value: 443
       - key: STORAGE_REGION
         value: us-east-1
       - key: STORAGE_BUCKET
-        value: avatars
+        value: dummy
+      - key: STORAGE_ACCESS_KEY
+        value: dummy
+      - key: STORAGE_SECRET_KEY
+        value: dummy
       - key: STORAGE_USE_SSL
         value: true
       - key: STORAGE_SKIP_BUCKET_CHECK
-        value: false
+        value: true
+      - key: STORAGE_URL
+        value: https://dummy.supabase.co
       - key: CHROME_URL
         value: wss://chrome.browserless.io
       - key: CHROME_TOKEN
