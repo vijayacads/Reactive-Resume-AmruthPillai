@@ -41,28 +41,9 @@ services:
       - key: STORAGE_URL
         value: https://dummy.supabase.co
       - key: CHROME_URL
-        value: ws://chrome:3000
+        value: wss://chrome.browserless.io
       - key: CHROME_TOKEN
-        value: chrome_token
-      - key: CHROME_IGNORE_HTTPS_ERRORS
-        value: false
-
-  - type: web
-    name: chrome
-    env: docker
-    plan: free
-    dockerfilePath: ./Dockerfile.chrome
-    envVars:
-      - key: HEALTH
-        value: "true"
-      - key: TOKEN
-        value: "chrome_token"
-      - key: PROXY_HOST
-        value: "chrome"
-      - key: PROXY_PORT
-        value: "3000"
-      - key: PROXY_SSL
-        value: "false"
+        value: your-browserless-token
 
 databases:
   - name: reactive-resume-db
