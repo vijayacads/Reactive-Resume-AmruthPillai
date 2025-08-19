@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: reactive-resume
+    env: node
+    plan: free
+    buildCommand: pnpm install && pnpm run build
+    startCommand: pnpm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: PUBLIC_URL
+        value: https://your-app-name.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: reactive-resume-db
+          property: connectionString
+      - key: ACCESS_TOKEN_SECRET
+        generateValue: true
+      - key: REFRESH_TOKEN_SECRET
+        generateValue: true
+      - key: MAIL_FROM
+        value: noreply@your-app-name.onrender.com
+      - key: STORAGE_ENDPOINT
+        value: your-supabase-project.supabase.co
+      - key: STORAGE_PORT
+        value: 443
+      - key: STORAGE_REGION
+        value: us-east-1
+      - key: STORAGE_BUCKET
+        value: avatars
+      - key: STORAGE_USE_SSL
+        value: true
+      - key: STORAGE_SKIP_BUCKET_CHECK
+        value: false
+      - key: CHROME_URL
+        value: wss://chrome.browserless.io
+      - key: CHROME_TOKEN
+        value: your-browserless-token
+
+databases:
+  - name: reactive-resume-db
+    databaseName: reactive_resume
+    user: reactive_resume_user
+    plan: free
