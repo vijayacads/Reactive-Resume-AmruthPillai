@@ -14,6 +14,7 @@ import deepmerge from "deepmerge";
 import { PrismaService } from "nestjs-prisma";
 
 import { PrinterService } from "@/server/printer/printer.service";
+import { UserService } from "@/server/user/user.service";
 
 import { StorageService } from "../storage/storage.service";
 
@@ -23,9 +24,16 @@ export class ResumeService {
     private readonly prisma: PrismaService,
     private readonly printerService: PrinterService,
     private readonly storageService: StorageService,
+    private readonly userService: UserService,
   ) {}
 
-  async create(userId: string, createResumeDto: CreateResumeDto) {
+  async create(userId: string | null, createResumeDto: CreateResumeDto) {
+    // If no userId provided, create a guest user
+    if (!userId) {
+      const guestUser = await this.userService.createGuestUser();
+      userId = guestUser.id;
+    }
+
     const { name, email, picture } = await this.prisma.user.findUniqueOrThrow({
       where: { id: userId },
       select: { name: true, email: true, picture: true },
@@ -46,7 +54,13 @@ export class ResumeService {
     });
   }
 
-  import(userId: string, importResumeDto: ImportResumeDto) {
+  async import(userId: string | null, importResumeDto: ImportResumeDto) {
+    // If no userId provided, create a guest user
+    if (!userId) {
+      const guestUser = await this.userService.createGuestUser();
+      userId = guestUser.id;
+    }
+
     const randomTitle = generateRandomName();
 
     return this.prisma.resume.create({

@@ -14,5 +14,6 @@ export const AuthGuard = () => {
     return <Outlet />;
   }
 
-  return <Navigate replace to={`/auth/login?redirect=${redirectTo}`} />;
+  // For guest users, redirect to dashboard instead of login
+  return <Navigate replace to={`/dashboard?redirect=${redirectTo}`} />;
 };

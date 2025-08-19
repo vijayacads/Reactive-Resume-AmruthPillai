@@ -3,6 +3,7 @@ import { Prisma, User } from "@prisma/client";
 import { UserWithSecrets } from "@reactive-resume/dto";
 import { ErrorMessage } from "@reactive-resume/utils";
 import { PrismaService } from "nestjs-prisma";
+import { createId } from "@paralleldrive/cuid2";
 
 import { StorageService } from "../storage/storage.service";
 
@@ -72,6 +73,27 @@ export class UserService {
 
   create(data: Prisma.UserCreateInput): Promise<UserWithSecrets> {
     return this.prisma.user.create({ data, include: { secrets: true } });
+  }
+
+  async createGuestUser(): Promise<UserWithSecrets> {
+    const guestId = createId();
+    const guestUsername = `guest_${guestId.slice(0, 8)}`;
+    const guestEmail = `${guestUsername}@guest.local`;
+
+    return this.prisma.user.create({
+      data: {
+        name: "Guest User",
+        username: guestUsername,
+        email: guestEmail,
+        provider: "email",
+        secrets: {
+          create: {
+            password: null, // No password for guest users
+          }
+        }
+      },
+      include: { secrets: true }
+    });
   }
 
   updateByEmail(email: string, data: Prisma.UserUpdateArgs["data"]): Promise<User> {

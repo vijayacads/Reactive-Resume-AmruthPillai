@@ -87,6 +87,7 @@ export const builderLoader: LoaderFunction<ResumeDto> = async ({ params }) => {
 
     return resume;
   } catch {
-    return redirect("/dashboard");
+    // For guest users, redirect to dashboard instead of login
+    return redirect("/dashboard/resumes");
   }
 };

@@ -1,7 +1,9 @@
+import { t } from "@lingui/macro";
 import { sortByDate } from "@reactive-resume/utils";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { useResumes } from "@/client/services/resume";
+import { useUser } from "@/client/services/user";
 
 import { BaseCard } from "./_components/base-card";
 import { CreateResumeCard } from "./_components/create-card";
@@ -10,6 +12,7 @@ import { ResumeCard } from "./_components/resume-card";
 
 export const GridView = () => {
   const { resumes, loading } = useResumes();
+  const { user } = useUser();
 
   return (
     <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
@@ -34,6 +37,22 @@ export const GridView = () => {
             <BaseCard />
           </div>
         ))}
+
+      {!loading && resumes && resumes.length === 0 && !user && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="col-span-full mt-8 text-center"
+        >
+          <div className="mx-auto max-w-md space-y-4">
+            <div className="text-4xl">📝</div>
+            <h3 className="text-lg font-semibold">{t`Welcome to Reactive Resume!`}</h3>
+            <p className="text-sm text-muted-foreground">
+              {t`You're in guest mode. Create your first resume to get started.`}
+            </p>
+          </div>
+        </motion.div>
+      )}
 
       {resumes && (
         <AnimatePresence>

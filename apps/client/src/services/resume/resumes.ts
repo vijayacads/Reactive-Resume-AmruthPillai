@@ -6,9 +6,13 @@ import { RESUMES_KEY } from "@/client/constants/query-keys";
 import { axios } from "@/client/libs/axios";
 
 export const fetchResumes = async () => {
-  const response = await axios.get<ResumeDto[], AxiosResponse<ResumeDto[]>>("/resume");
-
-  return response.data;
+  try {
+    const response = await axios.get<ResumeDto[], AxiosResponse<ResumeDto[]>>("/resume");
+    return response.data;
+  } catch (error) {
+    // For guest users, return empty array instead of throwing error
+    return [];
+  }
 };
 
 export const useResumes = () => {
@@ -19,7 +23,8 @@ export const useResumes = () => {
   } = useQuery({
     queryKey: RESUMES_KEY,
     queryFn: fetchResumes,
+    retry: false,
   });
 
-  return { resumes, loading, error };
+  return { resumes: resumes || [], loading, error };
 };

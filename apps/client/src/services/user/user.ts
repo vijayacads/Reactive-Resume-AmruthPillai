@@ -7,11 +7,15 @@ import { axios } from "@/client/libs/axios";
 import { useAuthStore } from "@/client/stores/auth";
 
 export const fetchUser = async () => {
-  const response = await axios.get<UserDto | undefined, AxiosResponse<UserDto | undefined>>(
-    "/user/me",
-  );
-
-  return response.data;
+  try {
+    const response = await axios.get<UserDto | undefined, AxiosResponse<UserDto | undefined>>(
+      "/user/me",
+    );
+    return response.data;
+  } catch (error) {
+    // Return undefined if user is not authenticated (guest mode)
+    return undefined;
+  }
 };
 
 export const useUser = () => {
@@ -24,6 +28,7 @@ export const useUser = () => {
   } = useQuery({
     queryKey: ["user"],
     queryFn: fetchUser,
+    retry: false,
   });
 
   useEffect(() => {

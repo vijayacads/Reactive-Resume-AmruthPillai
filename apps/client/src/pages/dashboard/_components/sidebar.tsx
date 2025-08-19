@@ -1,5 +1,5 @@
 import { t } from "@lingui/macro";
-import { FadersHorizontal, ReadCvLogo } from "@phosphor-icons/react";
+import { FadersHorizontal, ReadCvLogo, User } from "@phosphor-icons/react";
 import { Button, KeyboardShortcut, Separator } from "@reactive-resume/ui";
 import { cn } from "@reactive-resume/utils";
 import { motion } from "framer-motion";
@@ -87,12 +87,13 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
       shortcut: "⇧R",
       icon: <ReadCvLogo />,
     },
-    {
+    // Only show settings for authenticated users
+    ...(user ? [{
       path: "/dashboard/settings",
       name: t`Settings`,
       shortcut: "⇧S",
       icon: <FadersHorizontal />,
-    },
+    }] : []),
   ];
 
   return (
@@ -117,12 +118,19 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
 
       <Separator className="opacity-50" />
 
-      <UserOptions>
-        <Button size="lg" variant="ghost" className="w-full justify-start px-3">
-          <UserAvatar size={24} className="mr-3" />
-          <span>{user?.name}</span>
-        </Button>
-      </UserOptions>
+      {user ? (
+        <UserOptions>
+          <Button size="lg" variant="ghost" className="w-full justify-start px-3">
+            <UserAvatar size={24} className="mr-3" />
+            <span>{user.name}</span>
+          </Button>
+        </UserOptions>
+      ) : (
+        <div className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground">
+          <User size={16} />
+          <span>{t`Guest Mode`}</span>
+        </div>
+      )}
 
       <Copyright className="ml-2" />
     </div>
